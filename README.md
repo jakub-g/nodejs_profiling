@@ -3,16 +3,23 @@
 It's a tiny script that allows to log all invocations of `node` executable when you run a script which runs nested `node` processes
 (i.e. when you're calling JS scripts or globally installed modules like `npm`, `eslint`, `prettier` etc. through `spawn` or `exec`).
 
-# Logging vs writing to files
-
-Naive thing would be to `console.log`, but this does not show all invocations: in case the parent process swallows the stdout/stderr,
-not all processes will show up.
-
-Hence apart from logging, it also writes to tmp files (one file per node process created).
-
-You can display contents of all written files with `cat /path/to/nodejs_profiling/tmp* | tee log.log`.
+I used it to debug slowness of a precommit hook in our project. It turns out it indirectly invoked `node` 18 times (!), due to:
+- suboptimal code in our codebase
+- suboptimal config of `pre-commit` package
+- suboptimal code inside `pre-commit` package
+- suboptimal handling of `npm` shell calls on Windows by `npm`
 
 See https://gist.github.com/jakub-g/46c2ef2b9677eaba86837a2160752e42 and https://github.com/npm/cli/issues/3088.
+
+# Logging vs writing to files
+
+Naive thing would be to `console.log` each invocation to `stdout`, but this does not show all invocations: in case the parent process swallows the stdout/stderr,
+not all processes will show up.
+
+Hence apart from logging, it also writes to tmp files (one file per `node` process created).
+
+You can display contents of all written files with `cat /path/to/nodejs_profiling/tmp* | tee log.log`.
+(When running things multiple times, remember to clean up those tmp files before each run). 
 
 # Usage
 
