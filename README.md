@@ -4,7 +4,8 @@ It's a tiny script that allows to log all invocations of `node` executable when 
 (i.e. when you're calling JS scripts or globally installed modules like `npm`, `eslint`, `prettier` etc. through `spawn` or `exec`).
 
 I used it to debug slowness of a precommit hook in our project. It turns out it indirectly invoked `node` 18 times (!), due to:
-- suboptimal code in our codebase
+
+- suboptimal code in our codebase and overreliance on npm `scripts` in `package.json` as a way of composing tasks
 - suboptimal config of `pre-commit` package
 - suboptimal code inside `pre-commit` package
 - suboptimal handling of `npm` shell calls on Windows by `npm`
