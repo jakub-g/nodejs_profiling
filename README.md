@@ -3,8 +3,6 @@
 It's a tiny script that allows to log all invocations of `node` executable when you run a script which runs nested `node` processes
 (i.e. when you're calling JS scripts or globally installed modules like `npm`, `eslint`, `prettier` etc. through `spawn` or `exec`).
 
-It relies 
-
 # Logging vs writing to files
 
 Naive thing would be to `console.log`, but this does not show all invocations: in case the parent process swallows the stdout/stderr,
